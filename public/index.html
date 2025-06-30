@@ -1,0 +1,1275 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialHub - Modern Social Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e4e6ea;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 0;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 30px;
+        }
+
+        .logo h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #a0a3bd;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.full-width {
+            margin-left: 0;
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(15, 15, 35, 0.9);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Page Container */
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #a0a3bd;
+            font-size: 1.1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #e4e6ea;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #e4e6ea;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: #a0a3bd;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-small {
+            padding: 8px 20px;
+            font-size: 14px;
+            width: auto;
+        }
+
+        /* Tweets */
+        .tweet {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .tweet:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .tweet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tweet-username {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .tweet-date {
+            color: #a0a3bd;
+            font-size: 0.9rem;
+        }
+
+        .tweet-content {
+            margin: 15px 0;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .tweet-stats {
+            display: flex;
+            gap: 25px;
+            color: #a0a3bd;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .tweet-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* User Lists */
+        .user-list {
+            list-style: none;
+        }
+
+        .user-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .user-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        /* Messages */
+        .message {
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .success-message {
+            background: rgba(46, 213, 115, 0.1);
+            border: 1px solid rgba(46, 213, 115, 0.3);
+            color: #2ed573;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #a0a3bd;
+            font-size: 1.1rem;
+        }
+
+        /* Auth Pages */
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .auth-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .auth-subtitle {
+            color: #a0a3bd;
+            font-size: 1rem;
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #a0a3bd;
+        }
+
+        .auth-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-visible {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .auth-card {
+                padding: 30px 25px;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Floating Action Button for Mobile */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Tweet Input Enhancement */
+        .tweet-composer {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .tweet-input {
+            background: transparent;
+            border: none;
+            color: #e4e6ea;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .tweet-input:focus {
+            outline: none;
+        }
+
+        .tweet-input::placeholder {
+            color: #a0a3bd;
+            font-style: italic;
+        }
+
+        .char-counter {
+            text-align: right;
+            color: #a0a3bd;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-rocket"></i> SocialHub</h1>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchToPage('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home Feed</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchToPage('myTweets')">
+                    <i class="fas fa-feather-alt"></i>
+                    <span>My Posts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchToPage('followers')">
+                    <i class="fas fa-users"></i>
+                    <span>Followers</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchToPage('following')">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Following</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="switchToPage('tweetDetails')">
+                    <i class="fas fa-search"></i>
+                    <span>Explore Post</span>
+                </a>
+            </li>
+        </ul>
+        
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Login Page -->
+        <div id="loginPage" class="page">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h1 class="auth-title"><i class="fas fa-rocket"></i> SocialHub</h1>
+                        <p class="auth-subtitle">Welcome back! Sign in to continue</p>
+                    </div>
+                    
+                    <div id="loginError" class="error-message hidden"></div>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label" for="loginUsername">Username</label>
+                            <input type="text" id="loginUsername" class="form-input" placeholder="Enter your username" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+                    
+                    <div class="auth-link">
+                        Don't have an account? <a href="#" onclick="switchToPage('register')">Create one</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div id="registerPage" class="page hidden">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h1 class="auth-title"><i class="fas fa-user-plus"></i> Join SocialHub</h1>
+                        <p class="auth-subtitle">Create your account and start connecting</p>
+                    </div>
+                    
+                    <div id="registerError" class="error-message hidden"></div>
+                    <div id="registerSuccess" class="success-message hidden"></div>
+                    
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label class="form-label" for="registerName">Full Name</label>
+                            <input type="text" id="registerName" class="form-input" placeholder="Your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="registerUsername">Username</label>
+                            <input type="text" id="registerUsername" class="form-input" placeholder="Choose a username" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" class="form-input" placeholder="Create a strong password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="registerGender">Gender</label>
+                            <select id="registerGender" class="form-input" required>
+                                <option value="">Select your gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-rocket"></i> Create Account
+                        </button>
+                    </form>
+                    
+                    <div class="auth-link">
+                        Already have an account? <a href="#" onclick="switchToPage('login')">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home/Feed Page -->
+        <div id="homePage" class="page hidden">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fas fa-home"></i> Home Feed</h1>
+                <p class="page-subtitle">Stay updated with the latest posts from people you follow</p>
+            </div>
+            
+            <div class="card">
+                <div id="feedError" class="error-message hidden"></div>
+                <div id="feedLoading" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading your feed...
+                </div>
+                <div id="feedContent"></div>
+            </div>
+        </div>
+
+        <!-- Followers Page -->
+        <div id="followersPage" class="page hidden">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fas fa-users"></i> Your Followers</h1>
+                <p class="page-subtitle">People who follow your updates</p>
+            </div>
+            
+            <div class="card">
+                <div id="followersError" class="error-message hidden"></div>
+                <div id="followersLoading" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading followers...
+                </div>
+                <ul id="followersList" class="user-list"></ul>
+            </div>
+        </div>
+
+        <!-- Following Page -->
+        <div id="followingPage" class="page hidden">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fas fa-user-plus"></i> Following</h1>
+                <p class="page-subtitle">People you're following</p>
+            </div>
+            
+            <div class="card">
+                <div id="followingError" class="error-message hidden"></div>
+                <div id="followingLoading" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading following...
+                </div>
+                <ul id="followingList" class="user-list"></ul>
+            </div>
+        </div>
+
+        <!-- My Tweets Page -->
+        <div id="myTweetsPage" class="page hidden">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fas fa-feather-alt"></i> My Posts</h1>
+                <p class="page-subtitle">Share your thoughts and manage your posts</p>
+            </div>
+            
+            <div class="tweet-composer">
+                <div id="newTweetError" class="error-message hidden"></div>
+                <div id="newTweetSuccess" class="success-message hidden"></div>
+                <form id="newTweetForm">
+                    <div class="form-group">
+                        <textarea id="newTweetContent" class="form-input tweet-input" placeholder="What's on your mind? Share something amazing..." rows="4" maxlength="280" required></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span>/280
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">
+                        <i class="fas fa-paper-plane"></i> Share Post
+                    </button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 20px; color: #e4e6ea;">
+                    <i class="fas fa-list"></i> Your Posts
+                </h3>
+                <div id="myTweetsError" class="error-message hidden"></div>
+                <div id="myTweetsLoading" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading your posts...
+                </div>
+                <div id="myTweetsContent"></div>
+            </div>
+        </div>
+
+        <!-- Tweet Details Page -->
+        <div id="tweetDetailsPage" class="page hidden">
+            <div class="page-header">
+                <h1 class="page-title"><i class="fas fa-search"></i> Explore Post</h1>
+                <p class="page-subtitle">View detailed information about any post</p>
+            </div>
+            
+            <div class="card">
+                <div class="form-group">
+                    <label class="form-label" for="tweetIdInput">Post ID</label>
+                    <input type="number" id="tweetIdInput" class="form-input" placeholder="Enter post ID to explore" value="1">
+                    <button class="btn" onclick="loadTweetDetails()" style="margin-top: 15px;">
+                        <i class="fas fa-search"></i> Load Post Details
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div id="tweetDetailsError" class="error-message hidden"></div>
+                <div id="tweetDetailsLoading" class="loading hidden">
+                    <i class="fas fa-spinner fa-spin"></i> Loading post details...
+                </div>
+                <div id="tweetDetailsContent"></div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 20px; color: #e4e6ea;">
+                    <i class="fas fa-heart"></i> Likes
+                </h3>
+                <div id="tweetLikesContent"></div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 20px; color: #e4e6ea;">
+                    <i class="fas fa-comments"></i> Replies
+                </h3>
+                <div id="tweetRepliesContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab hidden" id="fab" onclick="switchToPage('myTweets')">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = 'http://localhost:3000'; // Change this to your backend URL
+        
+        // Utility Functions
+        function getToken() {
+            return localStorage.getItem('jwtToken');
+        }
+
+        function setToken(token) {
+            localStorage.setItem('jwtToken', token);
+        }
+
+        function removeToken() {
+            localStorage.removeItem('jwtToken');
+        }
+
+        function isAuthenticated() {
+            return !!getToken();
+        }
+
+        // Mobile Navigation
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-visible');
+        }
+
+        // API Functions
+        async function apiRequest(endpoint, options = {}) {
+            const url = `${API_BASE_URL}${endpoint}`;
+            const token = getToken();
+            
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                },
+                ...options
+            };
+
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+                
+                if (response.status === 401) {
+                    removeToken();
+                    switchToPage('login');
+                    throw new Error('Authentication required');
+                }
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Request failed');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API Request failed:', error);
+                throw error;
+            }
+        }
+
+        // Page Management
+        function switchToPage(pageName) {
+            // Update navigation active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(pageName + 'Page');
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                
+                // Update active nav link
+                const activeLink = document.querySelector(`[onclick="switchToPage('${pageName}')"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+                
+                // Show/hide sidebar and FAB based on page
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                const fab = document.getElementById('fab');
+                
+                if (pageName === 'login' || pageName === 'register') {
+                    sidebar.style.display = 'none';
+                    mainContent.classList.add('full-width');
+                    fab.classList.add('hidden');
+                } else {
+                    sidebar.style.display = 'block';
+                    mainContent.classList.remove('full-width');
+                    fab.classList.remove('hidden');
+                }
+                
+                // Load page data
+                loadPageData(pageName);
+                
+                // Close mobile sidebar
+                sidebar.classList.remove('mobile-visible');
+            }
+        }
+
+        function loadPageData(pageName) {
+            switch(pageName) {
+                case 'home':
+                    loadFeed();
+                    break;
+                case 'followers':
+                    loadFollowers();
+                    break;
+                case 'following':
+                    loadFollowing();
+                    break;
+                case 'myTweets':
+                    loadMyTweets();
+                    break;
+                case 'tweetDetails':
+                    // Tweet details loaded on demand
+                    break;
+            }
+        }
+
+        // Character Counter
+        document.addEventListener('DOMContentLoaded', () => {
+            const tweetInput = document.getElementById('newTweetContent');
+            const charCount = document.getElementById('charCount');
+            
+            if (tweetInput && charCount) {
+                tweetInput.addEventListener('input', () => {
+                    const count = tweetInput.value.length;
+                    charCount.textContent = count;
+                    charCount.style.color = count > 250 ? '#ff6b6b' : '#a0a3bd';
+                });
+            }
+        });
+
+        // Authentication Functions
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            try {
+                errorDiv.classList.add('hidden');
+                const response = await apiRequest('/login/', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password })
+                });
+                
+                setToken(response.jwtToken);
+                switchToPage('home');
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+            const gender = document.getElementById('registerGender').value;
+            
+            const errorDiv = document.getElementById('registerError');
+            const successDiv = document.getElementById('registerSuccess');
+            
+            try {
+                errorDiv.classList.add('hidden');
+                successDiv.classList.add('hidden');
+                
+                await apiRequest('/register/', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, username, password, gender })
+                });
+                
+                successDiv.textContent = 'Account created successfully! Redirecting to login...';
+                successDiv.classList.remove('hidden');
+                
+                // Clear form
+                document.getElementById('registerForm').reset();
+                
+                // Redirect to login after 2 seconds
+                setTimeout(() => switchToPage('login'), 2000);
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+
+        function logout() {
+            removeToken();
+            switchToPage('login');
+        }
+
+        // Feed Functions
+        async function loadFeed() {
+            const loadingDiv = document.getElementById('feedLoading');
+            const errorDiv = document.getElementById('feedError');
+            const contentDiv = document.getElementById('feedContent');
+            
+            try {
+                loadingDiv.style.display = 'block';
+                errorDiv.classList.add('hidden');
+                contentDiv.innerHTML = '';
+                
+                const tweets = await apiRequest('/user/tweets/feed/');
+                
+                loadingDiv.style.display = 'none';
+                
+                if (tweets.length === 0) {
+                    contentDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #a0a3bd;">
+                            <i class="fas fa-feather-alt" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <p>No posts in your feed yet.</p>
+                            <p>Follow some people to see their posts here!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                contentDiv.innerHTML = tweets.slice(0, 4).map(tweet => `
+                    <div class="tweet">
+                        <div class="tweet-header">
+                            <span class="tweet-username"><i class="fas fa-user-circle"></i> @${tweet.username}</span>
+                            <span class="tweet-date"><i class="fas fa-clock"></i> ${new Date(tweet.dateTime).toLocaleString()}</span>
+                        </div>
+                        <div class="tweet-content">${tweet.tweet}</div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // Followers Functions
+        async function loadFollowers() {
+            const loadingDiv = document.getElementById('followersLoading');
+            const errorDiv = document.getElementById('followersError');
+            const listDiv = document.getElementById('followersList');
+            
+            try {
+                loadingDiv.style.display = 'block';
+                errorDiv.classList.add('hidden');
+                listDiv.innerHTML = '';
+                
+                const followers = await apiRequest('/user/followers/');
+                
+                loadingDiv.style.display = 'none';
+                
+                if (followers.length === 0) {
+                    listDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #a0a3bd;">
+                            <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <p>No followers yet.</p>
+                            <p>Share great content to attract followers!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                listDiv.innerHTML = followers.map(follower => `
+                    <li class="user-item">
+                        <i class="fas fa-user-circle" style="margin-right: 10px; color: #667eea;"></i>
+                        ${follower.name}
+                    </li>
+                `).join('');
+                
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // Following Functions
+        async function loadFollowing() {
+            const loadingDiv = document.getElementById('followingLoading');
+            const errorDiv = document.getElementById('followingError');
+            const listDiv = document.getElementById('followingList');
+            
+            try {
+                loadingDiv.style.display = 'block';
+                errorDiv.classList.add('hidden');
+                listDiv.innerHTML = '';
+                
+                const following = await apiRequest('/user/following/');
+                
+                loadingDiv.style.display = 'none';
+                
+                if (following.length === 0) {
+                    listDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #a0a3bd;">
+                            <i class="fas fa-user-plus" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <p>Not following anyone yet.</p>
+                            <p>Discover and follow interesting people!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                listDiv.innerHTML = following.map(user => `
+                    <li class="user-item">
+                        <i class="fas fa-user-circle" style="margin-right: 10px; color: #667eea;"></i>
+                        ${user.name}
+                    </li>
+                `).join('');
+                
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // My Tweets Functions
+        document.getElementById('newTweetForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const tweet = document.getElementById('newTweetContent').value;
+            const errorDiv = document.getElementById('newTweetError');
+            const successDiv = document.getElementById('newTweetSuccess');
+            
+            try {
+                errorDiv.classList.add('hidden');
+                successDiv.classList.add('hidden');
+                
+                await apiRequest('/user/tweets/', {
+                    method: 'POST',
+                    body: JSON.stringify({ tweet })
+                });
+                
+                successDiv.textContent = 'Post shared successfully!';
+                successDiv.classList.remove('hidden');
+                
+                // Clear form and reload tweets
+                document.getElementById('newTweetForm').reset();
+                document.getElementById('charCount').textContent = '0';
+                loadMyTweets();
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+
+        async function loadMyTweets() {
+            const loadingDiv = document.getElementById('myTweetsLoading');
+            const errorDiv = document.getElementById('myTweetsError');
+            const contentDiv = document.getElementById('myTweetsContent');
+            
+            try {
+                loadingDiv.style.display = 'block';
+                errorDiv.classList.add('hidden');
+                contentDiv.innerHTML = '';
+                
+                const tweets = await apiRequest('/user/tweets/');
+                
+                loadingDiv.style.display = 'none';
+                
+                if (tweets.length === 0) {
+                    contentDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #a0a3bd;">
+                            <i class="fas fa-feather-alt" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <p>You haven't posted anything yet.</p>
+                            <p>Share your first post above!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                contentDiv.innerHTML = tweets.map(tweet => `
+                    <div class="tweet">
+                        <div class="tweet-content">${tweet.tweet}</div>
+                        <div class="tweet-stats">
+                            <span><i class="fas fa-heart"></i> ${tweet.likes} likes</span>
+                            <span><i class="fas fa-comments"></i> ${tweet.replies} replies</span>
+                            <span><i class="fas fa-clock"></i> ${new Date(tweet.dateTime).toLocaleString()}</span>
+                        </div>
+                        <div class="tweet-actions">
+                            <button class="btn btn-danger btn-small" onclick="deleteTweet(${tweet.tweetId})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        async function deleteTweet(tweetId) {
+            if (!confirm('Are you sure you want to delete this post?')) {
+                return;
+            }
+            
+            try {
+                await apiRequest(`/tweets/${tweetId}/`, {
+                    method: 'DELETE'
+                });
+                
+                // Reload tweets
+                loadMyTweets();
+                
+            } catch (error) {
+                alert('Failed to delete post: ' + error.message);
+            }
+        }
+
+        // Tweet Details Functions
+        async function loadTweetDetails() {
+            const tweetId = document.getElementById('tweetIdInput').value;
+            if (!tweetId) {
+                alert('Please enter a post ID');
+                return;
+            }
+            
+            const loadingDiv = document.getElementById('tweetDetailsLoading');
+            const errorDiv = document.getElementById('tweetDetailsError');
+            const contentDiv = document.getElementById('tweetDetailsContent');
+            const likesDiv = document.getElementById('tweetLikesContent');
+            const repliesDiv = document.getElementById('tweetRepliesContent');
+            
+            try {
+                loadingDiv.classList.remove('hidden');
+                errorDiv.classList.add('hidden');
+                contentDiv.innerHTML = '';
+                likesDiv.innerHTML = '';
+                repliesDiv.innerHTML = '';
+                
+                // Load tweet details
+                const tweet = await apiRequest(`/tweets/${tweetId}/`);
+                
+                contentDiv.innerHTML = `
+                    <div class="tweet">
+                        <div class="tweet-header">
+                            <span class="tweet-username"><i class="fas fa-user-circle"></i> @${tweet.username}</span>
+                            <span class="tweet-date"><i class="fas fa-clock"></i> ${new Date(tweet.dateTime).toLocaleString()}</span>
+                        </div>
+                        <div class="tweet-content">${tweet.tweet}</div>
+                        <div class="tweet-stats">
+                            <span><i class="fas fa-heart"></i> ${tweet.likes} likes</span>
+                            <span><i class="fas fa-comments"></i> ${tweet.replies} replies</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Load likes
+                try {
+                    const likes = await apiRequest(`/tweets/${tweetId}/likes/`);
+                    if (likes.length > 0) {
+                        likesDiv.innerHTML = likes.map(like => `
+                            <div class="user-item">
+                                <i class="fas fa-user-circle" style="margin-right: 10px; color: #667eea;"></i>
+                                @${like.username}
+                            </div>
+                        `).join('');
+                    } else {
+                        likesDiv.innerHTML = '<p style="color: #a0a3bd; text-align: center; padding: 20px;">No likes yet.</p>';
+                    }
+                } catch (error) {
+                    likesDiv.innerHTML = '<p style="color: #ff6b6b; text-align: center; padding: 20px;">Failed to load likes.</p>';
+                }
+                
+                // Load replies
+                try {
+                    const replies = await apiRequest(`/tweets/${tweetId}/replies/`);
+                    if (replies.length > 0) {
+                        repliesDiv.innerHTML = replies.map(reply => `
+                            <div class="tweet">
+                                <div class="tweet-header">
+                                    <span class="tweet-username"><i class="fas fa-user-circle"></i> @${reply.name}</span>
+                                </div>
+                                <div class="tweet-content">${reply.reply}</div>
+                            </div>
+                        `).join('');
+                    } else {
+                        repliesDiv.innerHTML = '<p style="color: #a0a3bd; text-align: center; padding: 20px;">No replies yet.</p>';
+                    }
+                } catch (error) {
+                    repliesDiv.innerHTML = '<p style="color: #ff6b6b; text-align: center; padding: 20px;">Failed to load replies.</p>';
+                }
+                
+                loadingDiv.classList.add('hidden');
+                
+            } catch (error) {
+                loadingDiv.classList.add('hidden');
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is authenticated
+            if (isAuthenticated()) {
+                switchToPage('home');
+            } else {
+                switchToPage('login');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'957b901026084853',t:'MTc1MTI2NDQ3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
